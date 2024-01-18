@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tic-Tac-Toe Game</title>
+    <!-- Correct Tailwind CSS CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
+    <script src="https://unpkg.com/htmx.org@1.9.10"
+        integrity="sha384-D1Kt99CQMDuVetoL1lrYwg5t+9QdHe7NLX/SoJYkXDFfX37iInKRy5xLSi8nO7UC"
+        crossorigin="anonymous"></script>
+</head>
+
+<body>
+    <!--
+// v0 by Vercel.
+// https://v0.dev/t/up4BMwinZRr
+-->
+    <div class="flex flex-col w-full min-h-screen bg-gray-100 dark:bg-gray-800">
+        <header
+            class="flex items-center h-16 px-4 border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 shrink-0 md:px-6">
+            <nav
+                class="flex-col hidden gap-6 text-lg font-medium md:flex md:flex-row md:items-center md:gap-5 md:text-sm lg:gap-6">
+                <a class="flex items-center gap-2 text-lg font-semibold text-blue-600 dark:text-blue-400 md:text-base"
+                    href="#"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round" class="w-6 h-6">
+                        <path d="M3 9h18v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V9Z"></path>
+                        <path d="m3 9 2.45-4.9A2 2 0 0 1 7.24 3h9.52a2 2 0 0 1 1.8 1.1L21 9"></path>
+                        <path d="M12 3v6"></path>
+                    </svg><span class="sr-only">Acme Inc</span></a>
+                <a class="font-bold text-blue-600 dark:text-blue-400" href="#">
+                    Expense Tracker
+                </a>
+            </nav>
+            <div class="flex items-center w-full gap-4 md:ml-auto md:gap-2 lg:gap-4">
+                <form class="flex-1 ml-auto sm:flex-initial">
+                    <div class="relative">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                            class="absolute left-2.5 top-2.5 h-4 w-4 text-gray-500 dark:text-gray-400">
+                            <circle cx="11" cy="11" r="8"></circle>
+                            <path d="m21 21-4.3-4.3"></path>
+                        </svg><input
+                            class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 pl-8 sm:w-[300px] md:w-[200px] lg:w-[300px]"
+                            placeholder="Search expenses..." type="search" />
+                    </div>
+                </form>
+                <button
+                    class="inline-flex items-center justify-center text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:bg-accent hover:text-accent-foreground h-10 w-10 rounded-full">
+                    <img alt="Avatar" class="rounded-full" height="32" src="/placeholder.svg"
+                        style="aspect-ratio: 32 / 32; object-fit: cover" width="32" /><span class="sr-only">Toggle user
+                        menu</span>
+                </button>
+            </div>
+        </header>
+        <main class="flex min-h-[calc(100vh_-_theme(spacing.16))] flex-1 flex-col gap-4 p-4 md:gap-8 md:p-10">
+            <div class="grid gap-4 md:grid-cols-3 lg:grid-cols-3">
+                <div class="rounded-lg border text-card-foreground shadow-sm bg-white dark:bg-gray-900"
+                    data-v0-t="card">
+                    <div class="p-6 flex flex-row items-center justify-between pb-2 space-y-0">
+                        <h3 class="tracking-tight text-sm font-medium text-blue-600 dark:text-blue-400">
+                            Total Expenses
+                        </h3>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                            class="w-4 h-4 text-gray-500 dark:text-gray-400">
+                            <line x1="12" x2="12" y1="2" y2="22"></line>
+                            <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                        </svg>
+                    </div>
+                    <div class="p-6">
+                        <div class="text-2xl font-bold text-blue-600 dark:text-blue-400">
+                            $45,231.89
+                        </div>
+                        <p class="text-xs text-gray-500 dark:text-gray-400">
+                            +20.1% from last month
+                        </p>
+                    </div>
+                </div>
+                <div class="rounded-lg border text-card-foreground shadow-sm bg-white dark:bg-gray-900"
+                    data-v0-t="card">
+                    <div class="p-6 flex flex-row items-center justify-between pb-2 space-y-0">
+                        <h3 class="tracking-tight text-sm font-medium text-blue-600 dark:text-blue-400">
+                            Expenses This Month
+                        </h3>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                            class="w-4 h-4 text-gray-500 dark:text-gray-400">
+                            <rect width="20" height="14" x="2" y="5" rx="2"></rect>
+                            <line x1="2" x2="22" y1="10" y2="10"></line>
+                        </svg>
+                    </div>
+                    <div class="p-6">
+                        <div class="text-2xl font-bold text-blue-600 dark:text-blue-400">
+                            +12,234
+                        </div>
+                        <p class="text-xs text-gray-500 dark:text-gray-400">
+                            +19% from last month
+                        </p>
+                    </div>
+                </div>
+                <div class="rounded-lg border text-card-foreground shadow-sm bg-white dark:bg-gray-900"
+                    data-v0-t="card">
+                    <div class="p-6 flex flex-row items-center justify-between pb-2 space-y-0">
+                        <h3 class="tracking-tight text-sm font-medium text-blue-600 dark:text-blue-400">
+                            Expense Filter
+                        </h3>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                            class="w-4 h-4 text-gray-500 dark:text-gray-400">
+                            <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
+                        </svg>
+                    </div>
+                    <div class="p-6">
+                        <div class="relative inline-flex">
+                            <svg class="w-2 h-2 absolute top-0 right-0 m-4 pointer-events-none"
+                                xmlns="http://www.w3.org/2000/svg" viewBox="0 0 412 232">
+                                <path
+                                    d="M206 171.144L42.678 9.144C27.17-5.658 0 6.582 0 25.956V206.05c0 10.493 8.581 19.056 19.098 19.056h373.804c10.516 0 19.098-8.563 19.098-19.056V25.956c0-19.374-27.172-31.514-42.679-16.812L206 171.144z"
+                                    fill="#fff"></path>
+                            </svg>
+                            <select
+                                class="border border-gray-300 rounded-full text-gray-600 h-10 pl-5 pr-10 bg-white hover:border-gray-400 focus:outline-none appearance-none">
+                                <option>All</option>
+                                <option>Food &amp; Beverages</option>
+                                <option>Transportation</option>
+                                <option>Grocery</option>
+                                <option>Entertainment</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="flex flex-col md:flex-row gap-4 md:gap-8">
+                <div class="md:w-full">
+                    <div class="rounded-lg border text-card-foreground shadow-sm bg-white dark:bg-gray-900"
+                        data-v0-t="card">
+                        <div class="p-6 flex flex-row items-center justify-between pb-2 space-y-0">
+                            <h3 class="tracking-tight text-sm font-medium text-blue-600 dark:text-blue-400">
+                                Expense History
+                            </h3>
+                            <div class="relative inline-flex">
+                                <svg class="w-2 h-2 absolute top-0 right-0 m-4 pointer-events-none"
+                                    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 412 232">
+                                    <path
+                                        d="M206 171.144L42.678 9.144C27.17-5.658 0 6.582 0 25.956V206.05c0 10.493 8.581 19.056 19.098 19.056h373.804c10.516 0 19.098-8.563 19.098-19.056V25.956c0-19.374-27.172-31.514-42.679-16.812L206 171.144z"
+                                        fill="#fff"></path>
+                                </svg><select
+                                    class="border border-gray-300 rounded-full text-gray-600 h-10 pl-5 pr-10 bg-white hover:border-gray-400 focus:outline-none appearance-none">
+                                    <option>All Dates</option>
+                                    <option>Last 7 Days</option>
+                                    <option>Last 30 Days</option>
+                                    <option>Last 3 Months</option>
+                                    <option>Last 6 Months</option>
+                                    <option>Last Year</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="relative w-full overflow-auto">
+                            <table class="w-full caption-bottom text-sm">
+                                <thead class="[&_tr]:border-b">
+                                    <tr
+                                        class="border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted">
+                                        <th
+                                            class="h-12 px-4 text-left align-middle font-medium text-muted-foreground [&:has([role=checkbox])]:pr-0 w-[100px]">
+                                            Date
+                                        </th>
+                                        <th
+                                            class="h-12 px-4 text-left align-middle font-medium text-muted-foreground [&:has([role=checkbox])]:pr-0">
+                                            Description
+                                        </th>
+                                        <th
+                                            class="h-12 px-4 text-left align-middle font-medium text-muted-foreground [&:has([role=checkbox])]:pr-0">
+                                            Type
+                                        </th>
+                                        <th
+                                            class="h-12 px-4 align-middle font-medium text-muted-foreground [&:has([role=checkbox])]:pr-0 text-right">
+                                            Amount
+                                        </th>
+                                        <th
+                                            class="h-12 px-4 align-middle font-medium text-muted-foreground [&:has([role=checkbox])]:pr-0 text-right">
+                                            Options
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody class="[&_tr:last-child]:border-0">
+                                    <tr
+                                        class="border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted">
+                                        <td class="p-4 align-middle [&:has([role=checkbox])]:pr-0 font-medium">
+                                            2024-01-16
+                                        </td>
+                                        <td class="p-4 align-middle [&:has([role=checkbox])]:pr-0">
+                                            Lunch with the team
+                                        </td>
+                                        <td class="p-4 align-middle [&:has([role=checkbox])]:pr-0">
+                                            Food &amp; Beverages
+                                        </td>
+                                        <td class="p-4 align-middle [&:has([role=checkbox])]:pr-0 text-right">
+                                            $250.00
+                                        </td>
+                                        <td class="p-4 align-middle [&:has([role=checkbox])]:pr-0 text-right">
+                                            <button
+                                                class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 w-10 mr-4">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                    viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                                    class="h-4 w-4">
+                                                    <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"></path>
+                                                    <path d="m15 5 4 4"></path>
+                                                </svg><span class="sr-only">Edit</span></button><button
+                                                class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 w-10">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                    viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                                    class="h-4 w-4">
+                                                    <path d="M3 6h18"></path>
+                                                    <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path>
+                                                    <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path>
+                                                </svg><span class="sr-only">Delete</span>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    <tr
+                                        class="border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted">
+                                        <td class="p-4 align-middle [&:has([role=checkbox])]:pr-0 font-medium">
+                                            2024-01-15
+                                        </td>
+                                        <td class="p-4 align-middle [&:has([role=checkbox])]:pr-0">
+                                            Office Supplies
+                                        </td>
+                                        <td class="p-4 align-middle [&:has([role=checkbox])]:pr-0">
+                                            Grocery
+                                        </td>
+                                        <td class="p-4 align-middle [&:has([role=checkbox])]:pr-0 text-right">
+                                            $150.00
+                                        </td>
+                                        <td class="p-4 align-middle [&:has([role=checkbox])]:pr-0 text-right">
+                                            <button
+                                                class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 w-10 mr-4">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                    viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                                    class="h-4 w-4">
+                                                    <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"></path>
+                                                    <path d="m15 5 4 4"></path>
+                                                </svg><span class="sr-only">Edit</span></button><button
+                                                class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 w-10">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                    viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                                    class="h-4 w-4">
+                                                    <path d="M3 6h18"></path>
+                                                    <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path>
+                                                    <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path>
+                                                </svg><span class="sr-only">Delete</span>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    <tr
+                                        class="border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted">
+                                        <td class="p-4 align-middle [&:has([role=checkbox])]:pr-0 font-medium">
+                                            2024-01-14
+                                        </td>
+                                        <td class="p-4 align-middle [&:has([role=checkbox])]:pr-0">
+                                            Gym Membership
+                                        </td>
+                                        <td class="p-4 align-middle [&:has([role=checkbox])]:pr-0">
+                                            Entertainment
+                                        </td>
+                                        <td class="p-4 align-middle [&:has([role=checkbox])]:pr-0 text-right">
+                                            $350.00
+                                        </td>
+                                        <td class="p-4 align-middle [&:has([role=checkbox])]:pr-0 text-right">
+                                            <button
+                                                class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 w-10 mr-4">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                    viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                                    class="h-4 w-4">
+                                                    <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"></path>
+                                                    <path d="m15 5 4 4"></path>
+                                                </svg><span class="sr-only">Edit</span></button><button
+                                                class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 w-10">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                    viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                                    class="h-4 w-4">
+                                                    <path d="M3 6h18"></path>
+                                                    <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path>
+                                                    <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path>
+                                                </svg><span class="sr-only">Delete</span>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    <tr
+                                        class="border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted">
+                                        <td class="p-4 align-middle [&:has([role=checkbox])]:pr-0 font-medium">
+                                            2024-01-13
+                                        </td>
+                                        <td class="p-4 align-middle [&:has([role=checkbox])]:pr-0">
+                                            New Laptop
+                                        </td>
+                                        <td class="p-4 align-middle [&:has([role=checkbox])]:pr-0">
+                                            Transportation
+                                        </td>
+                                        <td class="p-4 align-middle [&:has([role=checkbox])]:pr-0 text-right">
+                                            $450.00
+                                        </td>
+                                        <td class="p-4 align-middle [&:has([role=checkbox])]:pr-0 text-right">
+                                            <button
+                                                class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 w-10 mr-4">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                    viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                                    class="h-4 w-4">
+                                                    <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"></path>
+                                                    <path d="m15 5 4 4"></path>
+                                                </svg><span class="sr-only">Edit</span></button><button
+                                                class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 w-10">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                    viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                                    class="h-4 w-4">
+                                                    <path d="M3 6h18"></path>
+                                                    <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path>
+                                                    <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path>
+                                                </svg><span class="sr-only">Delete</span>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    <tr
+                                        class="border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted">
+                                        <td class="p-4 align-middle [&:has([role=checkbox])]:pr-0 font-medium">
+                                            2024-01-12
+                                        </td>
+                                        <td class="p-4 align-middle [&:has([role=checkbox])]:pr-0">
+                                            Coffee Beans
+                                        </td>
+                                        <td class="p-4 align-middle [&:has([role=checkbox])]:pr-0">
+                                            Grocery
+                                        </td>
+                                        <td class="p-4 align-middle [&:has([role=checkbox])]:pr-0 text-right">
+                                            $550.00
+                                        </td>
+                                        <td class="p-4 align-middle [&:has([role=checkbox])]:pr-0 text-right">
+                                            <button
+                                                class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 w-10 mr-4">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                    viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                                    class="h-4 w-4">
+                                                    <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"></path>
+                                                    <path d="m15 5 4 4"></path>
+                                                </svg><span class="sr-only">Edit</span></button><button
+                                                class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 w-10">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                    viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                                    class="h-4 w-4">
+                                                    <path d="M3 6h18"></path>
+                                                    <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path>
+                                                    <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path>
+                                                </svg><span class="sr-only">Delete</span>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</body>
+
+</html>
