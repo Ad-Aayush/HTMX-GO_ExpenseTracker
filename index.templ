@@ -224,16 +224,16 @@ templ index(data send_data) {
 									<line x1="2" x2="22" y1="10" y2="10"></line>
 								</svg>
 							</div>
-							<div
-								id="totalMonth"
-								class="text-2xl font-bold"
-								hx-get="/updateMonth"
-								hx-trigger="click delay:1ms from:#addBtn"
-								hx-swap="innerHTML"
-								hx-target="#totalMonth"
-							>
-								<div class="text-2xl font-bold  ">
-									${ strconv.Itoa(data.total_curr_month()) }
+							<div class="p-6">
+								<div
+									id="totalMonth"
+									class="text-2xl font-bold"
+									hx-get="/updateMonth"
+									hx-trigger="click delay:1ms from:#addBtn"
+									hx-swap="innerHTML"
+									hx-target="#totalMonth"
+								>
+									@totalMonthlyEx(data)
 								</div>
 							</div>
 						</div>
@@ -276,6 +276,10 @@ templ index(data send_data) {
 										<select
 											name="filter"
 											class="border border-gray-300 rounded-full text-gray-600 h-10 pl-5 pr-10 bg-white hover:border-gray-400 focus:outline-none appearance-none"
+											hx-get="/filter-data"
+											hx-trigger="change"
+											hx-swap="innerHTML"
+											hx-target="#output"
 										>
 											<option>All</option>
 											<option>Food &amp; Beverages</option>

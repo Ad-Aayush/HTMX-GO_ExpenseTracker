@@ -46,29 +46,15 @@ func (x send_data) total() int {
 func (x send_data) total_curr_month() int {
 	ans := 0
 	for _, exp := range x.array {
-		if exp.date.Month() == time.Now().Month() {
+		if exp.date.Month() == time.Now().Month() && exp.date.Year() == time.Now().Year() {
 			ans += exp.amount
 		}
 	}
 	return ans
 }
 
-func main() {
-	godotenv.Load(".env")
-	port := os.Getenv("PORT")
-	host := os.Getenv("HOST")
-	user := os.Getenv("DB_USER")
-	password := os.Getenv("DB_PASSWORD")
-	db_port := os.Getenv("DB_PORT")
-	db_name := os.Getenv("DB_NAME")
-	db_driver := os.Getenv("DB_DRIVER")
-
-	psqlconn := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s", host, db_port, user, password, db_name)
-	db, err := sql.Open(db_driver, psqlconn)
-	if err != nil {
-		log.Fatal(err)
-	}
-	rows, err := db.Query("SELECT * FROM expense ORDER BY date DESC")
+func sql_query(db *sql.DB, str string) []expense {
+	rows, err := db.Query(str)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -91,16 +77,29 @@ func main() {
 		expenses = append(expenses, exp)
 		// fmt.Print(exp.date.String())
 	}
+	return expenses
+}
+func main() {
+	godotenv.Load(".env")
+	port := os.Getenv("PORT")
+	host := os.Getenv("HOST")
+	user := os.Getenv("DB_USER")
+	password := os.Getenv("DB_PASSWORD")
+	db_port := os.Getenv("DB_PORT")
+	db_name := os.Getenv("DB_NAME")
+	db_driver := os.Getenv("DB_DRIVER")
+
+	psqlconn := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s", host, db_port, user, password, db_name)
+	db, err := sql.Open(db_driver, psqlconn)
+	if err != nil {
+		log.Fatal(err)
+	}
+	expenses := sql_query(db, "SELECT * FROM expense ORDER BY date DESC")
 
 	e := echo.New()
 	var sent send_data
 	sent.array = expenses
 
-	current_month := time.Now().Month()
-
-	if current_month == 1 {
-		fmt.Printf("%d\n", current_month)
-	}
 
 	e.GET("/", func(c echo.Context) error {
 		component := index(sent)
@@ -121,32 +120,9 @@ func main() {
 		db.Query(sqlQuery)
 
 		// * Query
-		rows, err := db.Query("SELECT * FROM expense ORDER BY date DESC")
-		if err != nil {
-			log.Fatal(err)
-		}
-
-		defer rows.Close()
-
-		var new_expenses []expense
-
-		for rows.Next() {
-			var exp expense
-
-			err = rows.Scan(&exp.date, &exp.description, &exp.category, &exp.amount)
-
-			if err != nil {
-				log.Fatal(err)
-			}
-
-			exp.date_str = exp.date.Format("02-01-2006")
-
-			new_expenses = append(new_expenses, exp)
-			// fmt.Print(exp.date.String())
-		}
-		sent.array = new_expenses
+		sent.array = sql_query(db, "SELECT * FROM expense ORDER BY date DESC")
 		fmt.Printf("HELLO")
-		return table_out(new_expenses).Render(context.Background(), c.Response().Writer)
+		return table_out(sent.array).Render(context.Background(), c.Response().Writer)
 	})
 
 	e.GET("/update", func(c echo.Context) error {
@@ -161,6 +137,25 @@ func main() {
 		fmt.Printf("Request Recieved %d", sent.total_curr_month())
 
 		return totalMonthlyEx(sent).Render(context.Background(), c.Response().Writer)
+	})
+
+	e.GET("/filter-data", func(c echo.Context) error {
+		// Wait 20ms
+		fmt.Printf("Request Recieved Filter")
+
+		category := c.FormValue("filter")
+		fmt.Printf("%v\n", category)
+
+		var query string
+
+		if category == "All" {
+			query = "SELECT * FROM expense ORDER BY date DESC"
+		} else {
+			query = fmt.Sprintf("SELECT * FROM expense WHERE type='%v' ORDER BY date DESC", category)
+		}
+		sent.array = sql_query(db, query)
+
+		return table_out(sent.array).Render(context.Background(), c.Response().Writer)
 	})
 
 	log.Fatal(e.Start(fmt.Sprintf(":%v", port)))
