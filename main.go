@@ -4,13 +4,13 @@ import (
 	"context"
 	"database/sql"
 	"fmt"
-	"log"
-	"os"
-	"time"
-
 	"github.com/joho/godotenv"
 	"github.com/labstack/echo/v4"
 	_ "github.com/lib/pq"
+	"log"
+	"os"
+	"strings"
+	"time"
 )
 
 // type date_type struct {
@@ -109,6 +109,47 @@ func sql_query(db *sql.DB, str string) []expense {
 	}
 	return expenses
 }
+
+func sql_filter(db *sql.DB, filter, filterDate, search string) []expense{
+	var query string
+		days := DaysInMonth(time.Now())
+		if filter == "All" {
+			date_str := time.Now().Format("2006-01-02")
+			// query = "SELECT * FROM expense ORDER BY date DESC"
+			if filterDate == "All Dates" {
+				query = fmt.Sprintf("SELECT * FROM expense WHERE LOWER(description) LIKE '%%%v%%' ORDER BY date DESC", search)
+			} else if filterDate == "Last 7 Days" {
+				query = fmt.Sprintf("SELECT * FROM expense WHERE '%v'<=date+7 AND date<='%v'  AND LOWER(description) LIKE '%%%v%%' ORDER BY date DESC", date_str, date_str, search)
+			} else if filterDate == "Last 30 Days" {
+				query = fmt.Sprintf("SELECT * FROM expense WHERE '%v'<=date+%d AND date<='%v' AND LOWER(description) LIKE '%%%v%%' ORDER BY date DESC", date_str, days, date_str, search)
+			} else if filterDate == "Last 3 Months" {
+				query = fmt.Sprintf("SELECT * FROM expense WHERE '%v'<=date+90 AND date<='%v' AND LOWER(description) LIKE '%%%v%%' ORDER BY date DESC", date_str, date_str, search)
+			} else if filterDate == "Last 6 Months" {
+				query = fmt.Sprintf("SELECT * FROM expense WHERE '%v'<=date+180 AND date<='%v' AND LOWER(description) LIKE '%%%v%%' ORDER BY date DESC", date_str, date_str, search)
+			} else if filterDate == "Last Year" {
+				query = fmt.Sprintf("SELECT * FROM expense WHERE '%v'<=date+365 AND date<='%v' AND LOWER(description) LIKE '%%%v%%' ORDER BY date DESC", date_str, date_str, search)
+			}
+
+		} else {
+			date_str := time.Now().Format("2006-01-02")
+			// query = "SELECT * FROM expense ORDER BY date DESC"
+			if filterDate == "All Dates" {
+				query = fmt.Sprintf("SELECT * FROM expense WHERE type='%v' AND LOWER(description) LIKE '%%%v%%' ORDER BY date DESC", filter, search)
+			} else if filterDate == "Last 7 Days" {
+				query = fmt.Sprintf("SELECT * FROM expense WHERE '%v'<=date+7 AND date<='%v' AND type='%v' AND LOWER(description) LIKE '%%%v%%' ORDER BY date DESC", date_str, date_str, filter, search)
+			} else if filterDate == "Last 30 Days" {
+				query = fmt.Sprintf("SELECT * FROM expense WHERE '%v'<=date+%d AND date<='%v' AND type='%v' AND LOWER(description) LIKE '%%%v%%' ORDER BY date DESC", date_str, days, date_str, filter, search)
+			} else if filterDate == "Last 3 Months" {
+				query = fmt.Sprintf("SELECT * FROM expense WHERE '%v'<=date+90 AND date<='%v' AND type='%v' AND LOWER(description) LIKE '%%%v%%' ORDER BY date DESC", date_str, date_str, filter, search)
+			} else if filterDate == "Last 6 Months" {
+				query = fmt.Sprintf("SELECT * FROM expense WHERE '%v'<=date+180 AND date<='%v' AND type='%v' AND LOWER(description) LIKE '%%%v%%' ORDER BY date DESC", date_str, date_str, filter, search)
+			} else if filterDate == "Last Year" {
+				query = fmt.Sprintf("SELECT * FROM expense WHERE '%v'<=date+365 AND date<='%v' AND type='%v' AND LOWER(description) LIKE '%%%v%%' ORDER BY date DESC", date_str, date_str, filter, search)
+			}
+		}
+		fmt.Printf("ADD: %v\n", query)
+		return sql_query(db, query)
+}
 func main() {
 	godotenv.Load(".env")
 	port := os.Getenv("PORT")
@@ -142,6 +183,7 @@ func main() {
 		filter := c.FormValue("filter")
 		filterDate := c.FormValue("filterDate")
 		amount := c.FormValue("amount")
+		search := c.FormValue("search")
 		// fmt.Print("hi\n")
 		fmt.Printf(filter, filterDate, category)
 		fmt.Printf("\n%v\n", filter)
@@ -150,44 +192,7 @@ func main() {
 		db.Query(sqlQuery)
 		sent.array = sql_query(db, "SELECT * FROM expense ORDER BY date DESC")
 		// * Query
-		var query string
-		days := DaysInMonth(time.Now())
-		if filter == "All" {
-			date_str := time.Now().Format("2006-01-02")
-			// query = "SELECT * FROM expense ORDER BY date DESC"
-			if filterDate == "All Dates" {
-				query = "SELECT * FROM expense ORDER BY date DESC"
-			} else if filterDate == "Last 7 Days" {
-				query = fmt.Sprintf("SELECT * FROM expense WHERE '%v'<=date+7 AND date<='%v' ORDER BY date DESC", date_str, date_str)
-			} else if filterDate == "Last 30 Days" {
-				query = fmt.Sprintf("SELECT * FROM expense WHERE '%v'<=date+%d AND date<='%v' ORDER BY date DESC", date_str, days, date_str)
-			} else if filterDate == "Last 3 Months" {
-				query = fmt.Sprintf("SELECT * FROM expense WHERE '%v'<=date+90 AND date<='%v' ORDER BY date DESC", date_str, date_str)
-			} else if filterDate == "Last 6 Months" {
-				query = fmt.Sprintf("SELECT * FROM expense WHERE '%v'<=date+180 AND date<='%v' ORDER BY date DESC", date_str, date_str)
-			} else if filterDate == "Last Year" {
-				query = fmt.Sprintf("SELECT * FROM expense WHERE '%v'<=date+365 AND date<='%v' ORDER BY date DESC", date_str, date_str)
-			}
-
-		} else {
-			date_str := time.Now().Format("2006-01-02")
-			// query = "SELECT * FROM expense ORDER BY date DESC"
-			if filterDate == "All Dates" {
-				query = fmt.Sprintf("SELECT * FROM expense WHERE type='%v' ORDER BY date DESC", filter)
-			} else if filterDate == "Last 7 Days" {
-				query = fmt.Sprintf("SELECT * FROM expense WHERE '%v'<=date+7 AND date<='%v' AND type='%v' ORDER BY date DESC", date_str, date_str, filter)
-			} else if filterDate == "Last 30 Days" {
-				query = fmt.Sprintf("SELECT * FROM expense WHERE '%v'<=date+%d AND date<='%v' AND type='%v' ORDER BY date DESC", date_str, days, date_str, filter)
-			} else if filterDate == "Last 3 Months" {
-				query = fmt.Sprintf("SELECT * FROM expense WHERE '%v'<=date+90 AND date<='%v' AND type='%v' ORDER BY date DESC", date_str, date_str, filter)
-			} else if filterDate == "Last 6 Months" {
-				query = fmt.Sprintf("SELECT * FROM expense WHERE '%v'<=date+180 AND date<='%v' AND type='%v' ORDER BY date DESC", date_str, date_str, filter)
-			} else if filterDate == "Last Year" {
-				query = fmt.Sprintf("SELECT * FROM expense WHERE '%v'<=date+365 AND date<='%v' AND type='%v' ORDER BY date DESC", date_str, date_str, filter)
-			}
-		}
-		fmt.Printf("ADD: %v\n", query)
-		sent.filter_array = sql_query(db, query)
+		sent.filter_array = sql_filter(db, filter, filterDate, search)
 		// fmt.Printf("HELLO")
 		return table_out(sent.filter_array).Render(context.Background(), c.Response().Writer)
 	})
@@ -206,53 +211,66 @@ func main() {
 		return totalMonthlyEx(sent).Render(context.Background(), c.Response().Writer)
 	})
 
-	e.GET("/filter-data", func(c echo.Context) error {
-		// Wait 20ms
+	e.GET("/filter", func(c echo.Context) error {
 		fmt.Printf("Request Recieved Filter\n")
 
-		category := c.FormValue("filter")
-		fmt.Printf("%v\n", category)
+		filter := c.FormValue("filter")
+		filterDate := c.FormValue("filterDate")
+		search := c.FormValue("search")
+		// fmt.Printf("%v\n", category)
 
-		var query string
-
-		if category == "All" {
-			query = "SELECT * FROM expense ORDER BY date DESC"
-		} else {
-			query = fmt.Sprintf("SELECT * FROM expense WHERE type='%v' ORDER BY date DESC", category)
-		}
-		sent.filter_array = sql_query(db, query)
+		sent.filter_array = sql_filter(db, filter, filterDate, search)
 
 		return table_out(sent.filter_array).Render(context.Background(), c.Response().Writer)
 	})
 
-	e.GET("/filter-date", func(c echo.Context) error {
-		// Wait 20ms
-		fmt.Printf("Request Recieved filterDate")
+	// e.GET("/filter-data", func(c echo.Context) error {
+	// 	// Wait 20ms
+	// 	fmt.Printf("Request Recieved Filter\n")
 
-		category := c.FormValue("filterDate")
-		fmt.Printf("%v\n", category)
+	// 	category := c.FormValue("filter")
+	// 	fmt.Printf("%v\n", category)
 
-		var query string
-		date_str := time.Now().Format("2006-01-02")
-		days := DaysInMonth(time.Now())
-		if category == "All Dates" {
-			query = "SELECT * FROM expense ORDER BY date DESC"
-		} else if category == "Last 7 Days" {
-			query = fmt.Sprintf("SELECT * FROM expense WHERE '%v'<=date+7 AND date<='%v' ORDER BY date DESC", date_str, date_str)
-		} else if category == "Last 30 Days" {
-			query = fmt.Sprintf("SELECT * FROM expense WHERE '%v'<=date+%d AND date<='%v' ORDER BY date DESC", date_str, days, date_str)
-		} else if category == "Last 3 Months" {
-			query = fmt.Sprintf("SELECT * FROM expense WHERE '%v'<=date+90 AND date<='%v' ORDER BY date DESC", date_str, date_str)
-		} else if category == "Last 6 Months" {
-			query = fmt.Sprintf("SELECT * FROM expense WHERE '%v'<=date+180 AND date<='%v' ORDER BY date DESC", date_str, date_str)
-		} else if category == "Last Year" {
-			query = fmt.Sprintf("SELECT * FROM expense WHERE '%v'<=date+365 AND date<='%v' ORDER BY date DESC", date_str, date_str)
-		}
+	// 	var query string
 
-		sent.filter_array = sql_query(db, query)
+	// 	if category == "All" {
+	// 		query = "SELECT * FROM expense ORDER BY date DESC"
+	// 	} else {
+	// 		query = fmt.Sprintf("SELECT * FROM expense WHERE type='%v' ORDER BY date DESC", category)
+	// 	}
+	// 	sent.filter_array = sql_query(db, query)
 
-		return table_out(sent.filter_array).Render(context.Background(), c.Response().Writer)
-	})
+	// 	return table_out(sent.filter_array).Render(context.Background(), c.Response().Writer)
+	// })
+
+	// e.GET("/filter-date", func(c echo.Context) error {
+	// 	// Wait 20ms
+	// 	fmt.Printf("Request Recieved filterDate")
+
+	// 	category := c.FormValue("filterDate")
+	// 	fmt.Printf("%v\n", category)
+
+	// 	var query string
+	// 	date_str := time.Now().Format("2006-01-02")
+	// 	days := DaysInMonth(time.Now())
+	// 	if category == "All Dates" {
+	// 		query = "SELECT * FROM expense ORDER BY date DESC"
+	// 	} else if category == "Last 7 Days" {
+	// 		query = fmt.Sprintf("SELECT * FROM expense WHERE '%v'<=date+7 AND date<='%v' ORDER BY date DESC", date_str, date_str)
+	// 	} else if category == "Last 30 Days" {
+	// 		query = fmt.Sprintf("SELECT * FROM expense WHERE '%v'<=date+%d AND date<='%v' ORDER BY date DESC", date_str, days, date_str)
+	// 	} else if category == "Last 3 Months" {
+	// 		query = fmt.Sprintf("SELECT * FROM expense WHERE '%v'<=date+90 AND date<='%v' ORDER BY date DESC", date_str, date_str)
+	// 	} else if category == "Last 6 Months" {
+	// 		query = fmt.Sprintf("SELECT * FROM expense WHERE '%v'<=date+180 AND date<='%v' ORDER BY date DESC", date_str, date_str)
+	// 	} else if category == "Last Year" {
+	// 		query = fmt.Sprintf("SELECT * FROM expense WHERE '%v'<=date+365 AND date<='%v' ORDER BY date DESC", date_str, date_str)
+	// 	}
+
+	// 	sent.filter_array = sql_query(db, query)
+
+	// 	return table_out(sent.filter_array).Render(context.Background(), c.Response().Writer)
+	// })
 
 	e.GET("/delete-row", func(c echo.Context) error {
 		date := c.FormValue("date")
@@ -268,6 +286,15 @@ func main() {
 			log.Fatal(err)
 		}
 		return oob(sent).Render(context.Background(), c.Response().Writer)
+	})
+
+	e.POST("/search", func(c echo.Context) error {
+		search := c.FormValue("search")
+		str := fmt.Sprintf("SELECT * FROM expense WHERE LOWER(description) LIKE '%%%v%%'", strings.ToLower(search))
+
+		fmt.Printf("%v\n", str)
+		sent.filter_array = sql_query(db, str)
+		return table_out(sent.filter_array).Render(context.Background(), c.Response().Writer)
 	})
 	log.Fatal(e.Start(fmt.Sprintf(":%v", port)))
 }

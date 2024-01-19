@@ -69,7 +69,7 @@ templ oob(data send_data) {
 		id="total"
 		class="text-2xl font-bold"
 		hx-get="/update"
-		hx-trigger="click delay:1ms from:#addBtn"
+		hx-trigger="click delay:10ms from:#addBtn"
 		hx-swap="innerHTML"
 		hx-target="#total"
 		hx-swap-oob="true"
@@ -80,7 +80,7 @@ templ oob(data send_data) {
 		id="totalMonth"
 		class="text-2xl font-bold"
 		hx-get="/updateMonth"
-		hx-trigger="click delay:1ms from:#addBtn"
+		hx-trigger="click delay:10ms from:#addBtn"
 		hx-swap="innerHTML"
 		hx-target="#totalMonth"
 		hx-swap-oob="true"
@@ -156,9 +156,15 @@ templ index(data send_data) {
 									<path d="m21 21-4.3-4.3"></path>
 								</svg>
 								<input
+									name="search"
+									id="search"
 									class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 pl-8 sm:w-[300px] md:w-[200px] lg:w-[300px]"
 									placeholder="Search expenses..."
 									type="search"
+									hx-trigger="input changed delay:500ms"
+									hx-get="/filter"
+									hx-target="#output"
+									hx-include="#dropdown,#dropdownDate"
 								/>
 							</div>
 						</form>
@@ -279,9 +285,10 @@ templ index(data send_data) {
 										<select
 											name="filter"
 											class="border border-gray-300 rounded-full text-gray-600 h-10 pl-5 pr-10 bg-white hover:border-gray-400 focus:outline-none appearance-none"
-											hx-get="/filter-data"
+											hx-get="/filter"
 											hx-trigger="change"
 											hx-swap="innerHTML"
+											hx-include="#dropdownDate,#search"
 											hx-target="#output"
 										>
 											<option>All</option>
@@ -320,9 +327,10 @@ templ index(data send_data) {
 											<select
 												class="border border-gray-300 rounded-full text-gray-600 h-10 pl-5 pr-10 bg-white hover:border-gray-400 focus:outline-none appearance-none"
 												name="filterDate"
-												hx-get="/filter-date"
+												hx-get="/filter"
 												hx-trigger="change"
 												hx-swap="innerHTML"
+												hx-include="#dropdown,#search"
 												hx-target="#output"
 											>
 												<option>All Dates</option>
@@ -396,7 +404,7 @@ templ index(data send_data) {
 															hx-swap="innerHTML"
 															hx-target="#output"
 															hx-post="/add"
-															hx-include="#dropdown,#dropdownDate"
+															hx-include="#dropdown,#dropdownDate,#search"
 															hx-sync="#total:queue last"
 														>
 															Add

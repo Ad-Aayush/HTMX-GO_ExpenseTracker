@@ -169,7 +169,7 @@ func oob(data send_data) templ.Component {
 			templ_7745c5c3_Var11 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div id=\"total\" class=\"text-2xl font-bold\" hx-get=\"/update\" hx-trigger=\"click delay:1ms from:#addBtn\" hx-swap=\"innerHTML\" hx-target=\"#total\" hx-swap-oob=\"true\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div id=\"total\" class=\"text-2xl font-bold\" hx-get=\"/update\" hx-trigger=\"click delay:10ms from:#addBtn\" hx-swap=\"innerHTML\" hx-target=\"#total\" hx-swap-oob=\"true\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -177,7 +177,7 @@ func oob(data send_data) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div><div id=\"totalMonth\" class=\"text-2xl font-bold\" hx-get=\"/updateMonth\" hx-trigger=\"click delay:1ms from:#addBtn\" hx-swap=\"innerHTML\" hx-target=\"#totalMonth\" hx-swap-oob=\"true\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div><div id=\"totalMonth\" class=\"text-2xl font-bold\" hx-get=\"/updateMonth\" hx-trigger=\"click delay:10ms from:#addBtn\" hx-swap=\"innerHTML\" hx-target=\"#totalMonth\" hx-swap-oob=\"true\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -288,7 +288,7 @@ func index(data send_data) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</a></nav><div class=\"flex items-center w-full gap-4 md:ml-auto md:gap-2 lg:gap-4\"><form class=\"flex-1 ml-auto sm:flex-initial\"><div class=\"relative\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"absolute left-2.5 top-2.5 h-4 w-4 text-gray-500 dark:text-gray-400\"><circle cx=\"11\" cy=\"11\" r=\"8\"></circle> <path d=\"m21 21-4.3-4.3\"></path></svg> <input class=\"flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 pl-8 sm:w-[300px] md:w-[200px] lg:w-[300px]\" placeholder=\"Search expenses...\" type=\"search\"></div></form></div></header><main class=\"flex min-h-[calc(100vh_-_theme(spacing.16))] flex-1 flex-col gap-4 p-4 md:gap-8 md:p-10\"><div class=\"grid gap-4 md:grid-cols-3 lg:grid-cols-3\"><div class=\"rounded-lg border text-card-foreground shadow-sm bg-white dark:bg-gray-900\" data-v0-t=\"card\"><div class=\"p-6 flex flex-row items-center justify-between pb-2 space-y-0\"><h3 class=\"tracking-tight text-sm font-medium\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</a></nav><div class=\"flex items-center w-full gap-4 md:ml-auto md:gap-2 lg:gap-4\"><form class=\"flex-1 ml-auto sm:flex-initial\"><div class=\"relative\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"absolute left-2.5 top-2.5 h-4 w-4 text-gray-500 dark:text-gray-400\"><circle cx=\"11\" cy=\"11\" r=\"8\"></circle> <path d=\"m21 21-4.3-4.3\"></path></svg> <input name=\"search\" id=\"search\" class=\"flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 pl-8 sm:w-[300px] md:w-[200px] lg:w-[300px]\" placeholder=\"Search expenses...\" type=\"search\" hx-trigger=\"input changed delay:500ms\" hx-get=\"/filter\" hx-target=\"#output\" hx-include=\"#dropdown,#dropdownDate\"></div></form></div></header><main class=\"flex min-h-[calc(100vh_-_theme(spacing.16))] flex-1 flex-col gap-4 p-4 md:gap-8 md:p-10\"><div class=\"grid gap-4 md:grid-cols-3 lg:grid-cols-3\"><div class=\"rounded-lg border text-card-foreground shadow-sm bg-white dark:bg-gray-900\" data-v0-t=\"card\"><div class=\"p-6 flex flex-row items-center justify-between pb-2 space-y-0\"><h3 class=\"tracking-tight text-sm font-medium\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -331,7 +331,7 @@ func index(data send_data) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</h3><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"w-4 h-4 text-gray-500 dark:text-gray-400\"><polygon points=\"22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3\"></polygon></svg></div><div class=\"p-6\"><div class=\"relative inline-flex\"><svg class=\"w-2 h-2 absolute top-0 right-0 m-4 pointer-events-none\" xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 412 232\"><path d=\"M206 171.144L42.678 9.144C27.17-5.658 0 6.582 0 25.956V206.05c0 10.493 8.581 19.056 19.098 19.056h373.804c10.516 0 19.098-8.563 19.098-19.056V25.956c0-19.374-27.172-31.514-42.679-16.812L206 171.144z\" fill=\"#fff\"></path></svg><form id=\"dropdown\"><select name=\"filter\" class=\"border border-gray-300 rounded-full text-gray-600 h-10 pl-5 pr-10 bg-white hover:border-gray-400 focus:outline-none appearance-none\" hx-get=\"/filter-data\" hx-trigger=\"change\" hx-swap=\"innerHTML\" hx-target=\"#output\"><option>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</h3><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"w-4 h-4 text-gray-500 dark:text-gray-400\"><polygon points=\"22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3\"></polygon></svg></div><div class=\"p-6\"><div class=\"relative inline-flex\"><svg class=\"w-2 h-2 absolute top-0 right-0 m-4 pointer-events-none\" xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 412 232\"><path d=\"M206 171.144L42.678 9.144C27.17-5.658 0 6.582 0 25.956V206.05c0 10.493 8.581 19.056 19.098 19.056h373.804c10.516 0 19.098-8.563 19.098-19.056V25.956c0-19.374-27.172-31.514-42.679-16.812L206 171.144z\" fill=\"#fff\"></path></svg><form id=\"dropdown\"><select name=\"filter\" class=\"border border-gray-300 rounded-full text-gray-600 h-10 pl-5 pr-10 bg-white hover:border-gray-400 focus:outline-none appearance-none\" hx-get=\"/filter\" hx-trigger=\"change\" hx-swap=\"innerHTML\" hx-include=\"#dropdownDate,#search\" hx-target=\"#output\"><option>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -385,7 +385,7 @@ func index(data send_data) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</h3><div class=\"relative inline-flex\"><svg class=\"w-2 h-2 absolute top-0 right-0 m-4 pointer-events-none\" xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 412 232\"><path d=\"M206 171.144L42.678 9.144C27.17-5.658 0 6.582 0 25.956V206.05c0 10.493 8.581 19.056 19.098 19.056h373.804c10.516 0 19.098-8.563 19.098-19.056V25.956c0-19.374-27.172-31.514-42.679-16.812L206 171.144z\" fill=\"#fff\"></path></svg><form id=\"dropdownDate\"><select class=\"border border-gray-300 rounded-full text-gray-600 h-10 pl-5 pr-10 bg-white hover:border-gray-400 focus:outline-none appearance-none\" name=\"filterDate\" hx-get=\"/filter-date\" hx-trigger=\"change\" hx-swap=\"innerHTML\" hx-target=\"#output\"><option>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</h3><div class=\"relative inline-flex\"><svg class=\"w-2 h-2 absolute top-0 right-0 m-4 pointer-events-none\" xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 412 232\"><path d=\"M206 171.144L42.678 9.144C27.17-5.658 0 6.582 0 25.956V206.05c0 10.493 8.581 19.056 19.098 19.056h373.804c10.516 0 19.098-8.563 19.098-19.056V25.956c0-19.374-27.172-31.514-42.679-16.812L206 171.144z\" fill=\"#fff\"></path></svg><form id=\"dropdownDate\"><select class=\"border border-gray-300 rounded-full text-gray-600 h-10 pl-5 pr-10 bg-white hover:border-gray-400 focus:outline-none appearance-none\" name=\"filterDate\" hx-get=\"/filter\" hx-trigger=\"change\" hx-swap=\"innerHTML\" hx-include=\"#dropdown,#search\" hx-target=\"#output\"><option>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -520,7 +520,7 @@ func index(data send_data) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</option></select></td><td class=\"p-4 text-right\"><input type=\"number\" name=\"amount\" class=\"border rounded-md p-2 w-1/4 inline-block text-right\" required></td><td class=\"p-4 text-right\"><button id=\"addBtn\" type=\"submit\" class=\"bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded\" hx-swap=\"innerHTML\" hx-target=\"#output\" hx-post=\"/add\" hx-include=\"#dropdown,#dropdownDate\" hx-sync=\"#total:queue last\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</option></select></td><td class=\"p-4 text-right\"><input type=\"number\" name=\"amount\" class=\"border rounded-md p-2 w-1/4 inline-block text-right\" required></td><td class=\"p-4 text-right\"><button id=\"addBtn\" type=\"submit\" class=\"bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded\" hx-swap=\"innerHTML\" hx-target=\"#output\" hx-post=\"/add\" hx-include=\"#dropdown,#dropdownDate,#search\" hx-sync=\"#total:queue last\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
