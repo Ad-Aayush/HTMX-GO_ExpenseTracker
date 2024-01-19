@@ -173,7 +173,7 @@ func main() {
 			date_str := time.Now().Format("2006-01-02")
 			// query = "SELECT * FROM expense ORDER BY date DESC"
 			if filterDate == "All Dates" {
-				query = fmt.Sprintf("SELECT * FROM expense WHERE AND type='%v' ORDER BY date DESC", filter)
+				query = fmt.Sprintf("SELECT * FROM expense WHERE type='%v' ORDER BY date DESC", filter)
 			} else if filterDate == "Last 7 Days" {
 				query = fmt.Sprintf("SELECT * FROM expense WHERE '%v'<=date+7 AND date<='%v' AND type='%v' ORDER BY date DESC", date_str, date_str, filter)
 			} else if filterDate == "Last 30 Days" {
