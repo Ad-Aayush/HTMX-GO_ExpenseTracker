@@ -1,0 +1,22 @@
+{
+    "sqltools.connections": [
+        {
+            "previewLimit": 50,
+            "server": "localhost",
+            "port": 5432,
+            "driver": "PostgreSQL",
+            "database": "Expense",
+            "username": "aayush_ad",
+            "name": "Default"
+        },
+        {
+            "previewLimit": 50,
+            "server": "localhost",
+            "port": 5432,
+            "driver": "PostgreSQL",
+            "name": "Default",
+            "database": "Expenses",
+            "username": "aayush_ad"
+        }
+    ]
+}
