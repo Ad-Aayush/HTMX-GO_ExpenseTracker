@@ -12,6 +12,87 @@ func getStr(date, description, category string, amount int) string {
 	return fmt.Sprintf("{\"date\": \"%v\", \"description\": \"%v\", \"category\": \"%v\", \"amount\": \"%v\"}", date_.Format("2006-01-02"), description, category, amount)
 }
 
+templ form(data send_data) {
+	<form class="w-full flex" id="add-form">
+		<table class="w-full caption-bottom text-sm">
+			<thead class="[&_tr]:border-b">
+				<tr
+					class="border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted"
+				>
+					<th
+						class="h-12 px-4 text-left align-middle font-medium text-muted-foreground [&:has([role=checkbox])]:pr-0 w-[100px]"
+					>
+						Date
+					</th>
+					<th
+						class="h-12 px-4 text-left align-middle font-medium text-muted-foreground [&:has([role=checkbox])]:pr-0"
+					>
+						Description
+					</th>
+					<th
+						class="h-12 px-4 text-left align-middle font-medium text-muted-foreground [&:has([role=checkbox])]:pr-0"
+					>
+						Type
+					</th>
+					<th
+						class="h-12 px-4 align-middle font-medium text-muted-foreground [&:has([role=checkbox])]:pr-0 text-right"
+					>
+						Amount
+					</th>
+					<th
+						class="h-12 px-4 align-middle font-medium text-muted-foreground [&:has([role=checkbox])]:pr-0 text-right"
+					>
+						Options
+					</th>
+				</tr>
+			</thead>
+			<tbody class="[&_tr:last-child]:border-0">
+				<tr id="input" class="border-b transition-colors hover:bg-muted/50">
+					<td class="p-4">
+						<input type="date" name="date" class="border rounded-md p-2" required/>
+					</td>
+					<td class="p-4">
+						<input type="text" name="description" class="border rounded-md p-2" required/>
+					</td>
+					<td class="p-4">
+						<select name="category" class="border rounded-md p-2" required>
+							<option value="Food & Beverages">Food & Beverages</option>
+							<option value="Transportation">Transportation</option>
+							<option value="Grocery">Grocery</option>
+							<option value="Entertainment">Entertainment</option>
+						</select>
+					</td>
+					<td class="p-4 text-right">
+						<input type="number" name="amount" class="border rounded-md p-2 w-1/4 inline-block text-right" required/>
+					</td>
+					<td class="p-4 text-right">
+						<button
+							id="addBtn"
+							type="submit"
+							class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+							hx-swap="outerHTML"
+							hx-target="#add-form"
+							hx-post="/add"
+							hx-include="#dropdown,#dropdownDate,#search"
+							hx-select="#add-form"
+						>
+							Add
+						</button>
+					</td>
+				</tr>
+			</tbody>
+			<tbody class="[&_tr:last-child]:border-0" id="output">
+				@table_out(data.array)
+			</tbody>
+		</table>
+	</form>
+}
+
+templ add(data send_data) {
+	@form(data)
+	@oob(data)
+}
+
 templ table_out(expenses []expense) {
 	for _, exp := range expenses {
 		<tr
@@ -68,10 +149,6 @@ templ oob(data send_data) {
 	<div
 		id="total"
 		class="text-2xl font-bold"
-		hx-get="/update"
-		hx-trigger="click delay:10ms from:#addBtn"
-		hx-swap="innerHTML"
-		hx-target="#total"
 		hx-swap-oob="true"
 	>
 		@totalEx(data)
@@ -79,10 +156,6 @@ templ oob(data send_data) {
 	<div
 		id="totalMonth"
 		class="text-2xl font-bold"
-		hx-get="/updateMonth"
-		hx-trigger="click delay:10ms from:#addBtn"
-		hx-swap="innerHTML"
-		hx-target="#totalMonth"
 		hx-swap-oob="true"
 	>
 		@totalMonthlyEx(data)
@@ -200,10 +273,6 @@ templ index(data send_data) {
 								<div
 									id="total"
 									class="text-2xl font-bold"
-									hx-get="/update"
-									hx-trigger="click delay:1ms from:#addBtn"
-									hx-swap="innerHTML"
-									hx-target="#total"
 								>
 									@totalEx(data)
 								</div>
@@ -237,10 +306,6 @@ templ index(data send_data) {
 								<div
 									id="totalMonth"
 									class="text-2xl font-bold"
-									hx-get="/updateMonth"
-									hx-trigger="click delay:1ms from:#addBtn"
-									hx-swap="innerHTML"
-									hx-target="#totalMonth"
 								>
 									@totalMonthlyEx(data)
 								</div>
@@ -344,79 +409,7 @@ templ index(data send_data) {
 									</div>
 								</div>
 								<div class="relative w-full overflow-auto">
-									<form class="w-full flex" id="add-form">
-										<table class="w-full caption-bottom text-sm">
-											<thead class="[&_tr]:border-b">
-												<tr
-													class="border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted"
-												>
-													<th
-														class="h-12 px-4 text-left align-middle font-medium text-muted-foreground [&:has([role=checkbox])]:pr-0 w-[100px]"
-													>
-														Date
-													</th>
-													<th
-														class="h-12 px-4 text-left align-middle font-medium text-muted-foreground [&:has([role=checkbox])]:pr-0"
-													>
-														Description
-													</th>
-													<th
-														class="h-12 px-4 text-left align-middle font-medium text-muted-foreground [&:has([role=checkbox])]:pr-0"
-													>
-														Type
-													</th>
-													<th
-														class="h-12 px-4 align-middle font-medium text-muted-foreground [&:has([role=checkbox])]:pr-0 text-right"
-													>
-														Amount
-													</th>
-													<th
-														class="h-12 px-4 align-middle font-medium text-muted-foreground [&:has([role=checkbox])]:pr-0 text-right"
-													>
-														Options
-													</th>
-												</tr>
-											</thead>
-											<tbody class="[&_tr:last-child]:border-0">
-												<tr id="input" class="border-b transition-colors hover:bg-muted/50">
-													<td class="p-4">
-														<input type="date" name="date" class="border rounded-md p-2" required/>
-													</td>
-													<td class="p-4">
-														<input type="text" name="description" class="border rounded-md p-2" required/>
-													</td>
-													<td class="p-4">
-														<select name="category" class="border rounded-md p-2" required>
-															<option value="Food & Beverages">Food & Beverages</option>
-															<option value="Transportation">Transportation</option>
-															<option value="Grocery">Grocery</option>
-															<option value="Entertainment">Entertainment</option>
-														</select>
-													</td>
-													<td class="p-4 text-right">
-														<input type="number" name="amount" class="border rounded-md p-2 w-1/4 inline-block text-right" required/>
-													</td>
-													<td class="p-4 text-right">
-														<button
-															id="addBtn"
-															type="submit"
-															class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-															hx-swap="innerHTML"
-															hx-target="#output"
-															hx-post="/add"
-															hx-include="#dropdown,#dropdownDate,#search"
-															hx-sync="#total:queue last"
-														>
-															Add
-														</button>
-													</td>
-												</tr>
-											</tbody>
-											<tbody class="[&_tr:last-child]:border-0" id="output">
-												@table_out(data.array)
-											</tbody>
-										</table>
-									</form>
+									@form(data)
 								</div>
 							</div>
 						</div>

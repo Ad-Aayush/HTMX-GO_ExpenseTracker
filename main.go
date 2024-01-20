@@ -183,7 +183,7 @@ func main() {
 		// * Query
 		sent.filter_array = sql_filter(db, filter, filterDate, search)
 		// fmt.Printf("HELLO")
-		return table_out(sent.filter_array).Render(context.Background(), c.Response().Writer)
+		return add(sent).Render(context.Background(), c.Response().Writer)
 	})
 
 	e.GET("/update", func(c echo.Context) error {
